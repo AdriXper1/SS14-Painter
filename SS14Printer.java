@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.JTextPane;
 import java.net.URI;
+import javax.swing.JTextPane;
 
 public class SS14Printer extends Frame implements ActionListener, TextListener, ItemListener{
 
@@ -124,7 +124,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.size1Checkbox.getState())
 				this.text.setText(this.text.getText() + "[head=1]");
 			else
-				this.text.setText(this.text.getText() + "[\\head]");
+				this.text.setText(this.text.getText() + "[/head]");
 		}
 
 		if (e.getSource() == this.size2Checkbox)
@@ -132,7 +132,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.size2Checkbox.getState())
 				this.text.setText(this.text.getText() + "[head=2]");
 			else
-				this.text.setText(this.text.getText() + "[\\head]");
+				this.text.setText(this.text.getText() + "[/head]");
 		}
 
 		if (e.getSource() == this.size3Checkbox)
@@ -140,7 +140,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.size3Checkbox.getState())
 				this.text.setText(this.text.getText() + "[head=3]");
 			else
-				this.text.setText(this.text.getText() + "[\\head]");
+				this.text.setText(this.text.getText() + "[/head]");
 		}
 
 		if (e.getSource() == this.boldCheckbox)
@@ -148,7 +148,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.boldCheckbox.getState())
 				this.text.setText(this.text.getText() + "[bold]");
 			else
-				this.text.setText(this.text.getText() + "[\\bold]");
+				this.text.setText(this.text.getText() + "[/bold]");
 		}
 
 		if (e.getSource() == this.italicCheckbox)
@@ -156,7 +156,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.italicCheckbox.getState())
 				this.text.setText(this.text.getText() + "[italic]");
 			else
-				this.text.setText(this.text.getText() + "[\\italic]");
+				this.text.setText(this.text.getText() + "[/italic]");
 		}
 
 		if (e.getSource() == this.bolditalicCheckbox)
@@ -164,7 +164,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.bolditalicCheckbox.getState())
 				this.text.setText(this.text.getText() + "[bolditalic]");
 			else
-				this.text.setText(this.text.getText() + "[\\bolditalic]");
+				this.text.setText(this.text.getText() + "[/bolditalic]");
 		}
 
 		if (e.getSource() == this.monoCheckbox)
@@ -172,8 +172,9 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			if (this.monoCheckbox.getState())
 				this.text.setText(this.text.getText() + "[mono]");
 			else
-				this.text.setText(this.text.getText() + "[\\mono]");
+				this.text.setText(this.text.getText() + "[/mono]");
 		}
+		this.text.setCaretPosition(this.text.getText().length());
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -210,6 +211,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 		{
 			this.text.setText(this.text.getText() + "[color=000000]");
 		}
+		this.text.setCaretPosition(this.text.getText().length());
 	}
 
 	public void textValueChanged(TextEvent e)
@@ -230,15 +232,17 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 
 		toReturn += "</html>";
 		return toReturn
-			.replaceAll("\\[head=(\\d)\\]", "<h$1><nobr>")
-			.replace("[\\head]", "</h1>")
+			.replace("[head=1]", "<span style=\"font-size:28pt; font-weight:bold;\">")
+			.replace("[head=2]", "<span style=\"font-size:20pt; font-weight:bold;\">")
+			.replace("[head=3]", "<span style=\"font-size:17pt; font-weight:bold;\">")
+			.replace("[/head]", "</span>")
 			.replace("[bold]", "<b>")
-			.replace("[\\bold]", "</b>")
+			.replace("[/bold]", "</b>")
 			.replace("[italic]", "<i>")
-			.replace("[\\italic]", "</i>")
+			.replace("[/italic]", "</i>")
 			.replace("[bolditalic]", "<b><i>")
-			.replace("[\\bolditalic]", "</i></b>");
-			//left color, size, mono
+			.replace("[/bolditalic]", "</i></b>");
+			//left color, mono
 	}
 
 	public static void main(String[] args) {new SS14Printer();}
