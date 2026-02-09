@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.JTextPane;
 import java.net.URI;
 
-public class SS14Printer extends Frame implements ActionListener{
+public class SS14Printer extends Frame implements ActionListener, TextListener, ItemListener{
 
 	//Declaring Instances//
 	Frame frame 	= new Frame();
@@ -15,24 +16,29 @@ public class SS14Printer extends Frame implements ActionListener{
 	MenuItem savMenuItem  = new MenuItem("Save");
 	MenuItem guidMenuItem = new MenuItem("SS14 documentation");
 
-	Panel panel		= new Panel(new BorderLayout());
-	Panel leftPanel	= new Panel(new BorderLayout());
+	Panel panel		 = new Panel(new GridLayout(1,3));
+	Panel leftPanel	 = new Panel(new BorderLayout());
 
-	Panel setings	= new Panel(new GridLayout(3,10));
-	Panel colors	= new Panel(new GridLayout(3,10));
+	Panel setings	 = new Panel(new GridLayout(3,10));
+	Panel colors	 = new Panel(new GridLayout(3,10));
 
-	TextArea result = new TextArea("super long test");
+	TextArea text    = new TextArea("super long test");
+	JTextPane result = new JTextPane();
 
-	Button sizeButton		= new Button("Size");
-	Button boldButton		= new Button("Bold");
-	Button italicButton		= new Button("Italic");
-	Button bolditalicButton	= new Button("Bold-Italic");
-	Button monoButton		= new Button("Mono");
+	Checkbox size1Checkbox		= new Checkbox("Size1");
+	Checkbox size2Checkbox		= new Checkbox("Size2");
+	Checkbox size3Checkbox		= new Checkbox("Size3");
+	Checkbox boldCheckbox		= new Checkbox("Bold");
+	Checkbox italicCheckbox		= new Checkbox("Italic");
+	Checkbox bolditalicCheckbox	= new Checkbox("Bold-Italic");
+	Checkbox monoCheckbox		= new Checkbox("Mono");
 	
 	Button redButton		= new Button();
 	Button blueButton		= new Button();
 	Button yellowButton		= new Button();
 	Button blackButton		= new Button();
+
+	Label  label			= new Label();
 
 	public SS14Printer()
 	{ 
@@ -46,17 +52,20 @@ public class SS14Printer extends Frame implements ActionListener{
 		fileMenu.add(savMenuItem);
 		helpMenu.add(guidMenuItem);
 
-		panel.add(result, BorderLayout.EAST);
-		panel.add(leftPanel, BorderLayout.WEST);
+		panel.add(leftPanel);
+		panel.add(text);
+		panel.add(result);
 
 		leftPanel.add(setings, BorderLayout.NORTH);
 		leftPanel.add(colors, BorderLayout.SOUTH);
 
-		setings.add(sizeButton);
-		setings.add(boldButton);
-		setings.add(italicButton);
-		setings.add(bolditalicButton);
-		setings.add(monoButton);
+		setings.add(size1Checkbox);
+		setings.add(size2Checkbox);
+		setings.add(size3Checkbox);
+		setings.add(boldCheckbox);
+		setings.add(italicCheckbox);
+		setings.add(bolditalicCheckbox);
+		setings.add(monoCheckbox);
 
 		colors.add(redButton);
 		colors.add(blueButton);
@@ -69,25 +78,33 @@ public class SS14Printer extends Frame implements ActionListener{
 		yellowButton.setBackground	(new Color(255,255,0));
 		blackButton.setBackground	(new Color(0,0,0));
 
+		result.setContentType("text/html");
+
 		//Activate Buton//
 		guidMenuItem.addActionListener(this);
 
-		sizeButton.addActionListener(this);
-		boldButton.addActionListener(this);
-		italicButton.addActionListener(this);
-		bolditalicButton.addActionListener(this);
-		monoButton.addActionListener(this);
+		size1Checkbox.addItemListener(this);
+		size2Checkbox.addItemListener(this);
+		size3Checkbox.addItemListener(this);
+		boldCheckbox.addItemListener(this);
+		italicCheckbox.addItemListener(this);
+		bolditalicCheckbox.addItemListener(this);
+		monoCheckbox.addItemListener(this);
 
 		redButton.addActionListener(this);
 		blueButton.addActionListener(this);
 		yellowButton.addActionListener(this);
 		blackButton.addActionListener(this);
 
+		text.addTextListener(this);
+
 
 
 		//Set And Show Frame//
 		frame.setTitle("Space Printer");
-		frame.setSize(1000, 500);
+		frame.setLocation(0, 0);
+		frame.setSize(1000,500);
+		frame.setExtendedState(MAXIMIZED_BOTH);
 		frame.setVisible(true);
 
 
@@ -97,6 +114,66 @@ public class SS14Printer extends Frame implements ActionListener{
 				System.exit(0);}
 			}
 		);
+	}
+
+	public void itemStateChanged(ItemEvent e)
+	{
+		//Formating//
+		if (e.getSource() == this.size1Checkbox)
+		{
+			if (this.size1Checkbox.getState())
+				this.text.setText(this.text.getText() + "[head=1]");
+			else
+				this.text.setText(this.text.getText() + "[\\head]");
+		}
+
+		if (e.getSource() == this.size2Checkbox)
+		{
+			if (this.size2Checkbox.getState())
+				this.text.setText(this.text.getText() + "[head=2]");
+			else
+				this.text.setText(this.text.getText() + "[\\head]");
+		}
+
+		if (e.getSource() == this.size3Checkbox)
+		{
+			if (this.size3Checkbox.getState())
+				this.text.setText(this.text.getText() + "[head=3]");
+			else
+				this.text.setText(this.text.getText() + "[\\head]");
+		}
+
+		if (e.getSource() == this.boldCheckbox)
+		{
+			if (this.boldCheckbox.getState())
+				this.text.setText(this.text.getText() + "[bold]");
+			else
+				this.text.setText(this.text.getText() + "[\\bold]");
+		}
+
+		if (e.getSource() == this.italicCheckbox)
+		{
+			if (this.italicCheckbox.getState())
+				this.text.setText(this.text.getText() + "[italic]");
+			else
+				this.text.setText(this.text.getText() + "[\\italic]");
+		}
+
+		if (e.getSource() == this.bolditalicCheckbox)
+		{
+			if (this.bolditalicCheckbox.getState())
+				this.text.setText(this.text.getText() + "[bolditalic]");
+			else
+				this.text.setText(this.text.getText() + "[\\bolditalic]");
+		}
+
+		if (e.getSource() == this.monoCheckbox)
+		{
+			if (this.monoCheckbox.getState())
+				this.text.setText(this.text.getText() + "[mono]");
+			else
+				this.text.setText(this.text.getText() + "[\\mono]");
+		}
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -113,53 +190,55 @@ public class SS14Printer extends Frame implements ActionListener{
 			}
 		}
 
-		//Formating//
-		if (e.getSource() == this.sizeButton)
-		{
-			this.result.setText(this.result.getText() + "[head=1][\\head]");
-		}
-
-		if (e.getSource() == this.boldButton)
-		{
-			this.result.setText(this.result.getText() + "[bold][\\bold]");
-		}
-
-		if (e.getSource() == this.italicButton)
-		{
-			this.result.setText(this.result.getText() + "[italic][\\italic]");
-		}
-
-		if (e.getSource() == this.bolditalicButton)
-		{
-			this.result.setText(this.result.getText() + "[bolditalic][\\bolditalic]");
-		}
-
-		if (e.getSource() == this.monoButton)
-		{
-			this.result.setText(this.result.getText() + "[mono][\\mono]");
-		}
-
-
 		//Colors//
 		if (e.getSource() == this.redButton)
 		{
-			this.result.setText(this.result.getText() + "[color=ff0000][\\color]");
+			this.text.setText(this.text.getText() + "[color=ff0000]");
 		}
 
 		if (e.getSource() == this.blueButton)
 		{
-			this.result.setText(this.result.getText() + "[color=0000ff][\\color]");
+			this.text.setText(this.text.getText() + "[color=0000ff]");
 		}
 
 		if (e.getSource() == this.yellowButton)
 		{
-			this.result.setText(this.result.getText() + "[color=ffff00][\\color]");
+			this.text.setText(this.text.getText() + "[color=ffff00]");
 		}
 
 		if (e.getSource() == this.blackButton)
 		{
-			this.result.setText(this.result.getText() + "[color=000000][\\color]");
+			this.text.setText(this.text.getText() + "[color=000000]");
 		}
+	}
+
+	public void textValueChanged(TextEvent e)
+	{
+		if (e.getSource() == this.text)
+		{
+			this.result.setText(Decoder(this.text.getText()));
+			this.text.requestFocus();
+		}
+	}
+
+
+	public String Decoder(String text)
+	{
+		String toReturn = "<html>";
+
+		toReturn += this.text.getText();
+
+		toReturn += "</html>";
+		return toReturn
+			.replaceAll("\\[head=(\\d)\\]", "<h$1><nobr>")
+			.replace("[\\head]", "</h1>")
+			.replace("[bold]", "<b>")
+			.replace("[\\bold]", "</b>")
+			.replace("[italic]", "<i>")
+			.replace("[\\italic]", "</i>")
+			.replace("[bolditalic]", "<b><i>")
+			.replace("[\\bolditalic]", "</i></b>");
+			//left color, size, mono
 	}
 
 	public static void main(String[] args) {new SS14Printer();}
