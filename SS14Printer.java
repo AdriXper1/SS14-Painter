@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URI;
+
+import javax.swing.JEditorPane;
 import javax.swing.JTextPane;
 
 public class SS14Printer extends Frame implements ActionListener, TextListener, ItemListener{
@@ -79,6 +81,9 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 		blackButton.setBackground	(new Color(0,0,0));
 
 		result.setContentType("text/html");
+		result.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+		result.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+
 
 		//Activate Buton//
 		guidMenuItem.addActionListener(this);
@@ -194,22 +199,22 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 		//Colors//
 		if (e.getSource() == this.redButton)
 		{
-			this.text.setText(this.text.getText() + "[color=ff0000]");
+			this.text.setText(this.text.getText() + "[color=#ff0000]");
 		}
 
 		if (e.getSource() == this.blueButton)
 		{
-			this.text.setText(this.text.getText() + "[color=0000ff]");
+			this.text.setText(this.text.getText() + "[color=#0000ff]");
 		}
 
 		if (e.getSource() == this.yellowButton)
 		{
-			this.text.setText(this.text.getText() + "[color=ffff00]");
+			this.text.setText(this.text.getText() + "[color=#ffff00]");
 		}
 
 		if (e.getSource() == this.blackButton)
 		{
-			this.text.setText(this.text.getText() + "[color=000000]");
+			this.text.setText(this.text.getText() + "[color=#000000]");
 		}
 		this.text.setCaretPosition(this.text.getText().length());
 	}
@@ -232,6 +237,9 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 
 		toReturn += "</html>";
 		return toReturn
+			.replace("\n", "<br>")
+			.replace("\t", "&emsp;")
+			.replace(" ", "&nbsp;")
 			.replace("[head=1]", "<span style=\"font-size:28pt; font-weight:bold;\">")
 			.replace("[head=2]", "<span style=\"font-size:20pt; font-weight:bold;\">")
 			.replace("[head=3]", "<span style=\"font-size:17pt; font-weight:bold;\">")
@@ -241,8 +249,12 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			.replace("[italic]", "<i>")
 			.replace("[/italic]", "</i>")
 			.replace("[bolditalic]", "<b><i>")
-			.replace("[/bolditalic]", "</i></b>");
-			//left color, mono
+			.replace("[/bolditalic]", "</i></b>")
+			.replace("[mono]", "<tt>")
+			.replace("[/mono]", "</tt>")
+			.replaceAll("\\[color=#([0-9-fa-f]{6})\\]", "<span style=\"color:#$1;\">")
+			.replace("[/color]", "</span>");
+			//left color
 	}
 
 	public static void main(String[] args) {new SS14Printer();}
