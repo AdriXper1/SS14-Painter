@@ -1,9 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.net.URI;
 
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
@@ -15,7 +17,8 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 	MenuBar menuBar = new MenuBar();
 
 	Menu fileMenu	= new Menu("File");
-		MenuItem savMenuItem  = new MenuItem("Save");
+		MenuItem saveMenuItem  = new MenuItem("Save");
+		MenuItem uploadImage   = new MenuItem("Upload Image");
 
 	Menu blockMenu  = new Menu("Add Block");
 		MenuItem upperHalfBlock							= new MenuItem("▀ : Upper half block");
@@ -94,7 +97,8 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 		frame.setMenuBar(menuBar);
 
 		menuBar.add(fileMenu);
-			fileMenu.add(savMenuItem);
+			fileMenu.add(saveMenuItem);
+			fileMenu.add(uploadImage);
 		
 		menuBar.add(blockMenu);
 			blockMenu.add(upperHalfBlock);
@@ -175,6 +179,8 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 
 
 		//Activate Buton//
+		uploadImage.addActionListener(this);
+
 		upperHalfBlock.addActionListener(this);
 		lowerOneEighthBlock.addActionListener(this);
 		lowerOneQuarterBlock.addActionListener(this);
@@ -312,6 +318,18 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 	public void actionPerformed(ActionEvent e)
 	{
 		//Menu Bar//
+		if (e.getSource() == this.uploadImage)
+		{
+	        JFileChooser fileChooser = new JFileChooser();
+	        fileChooser.setDialogTitle("Select a file");
+	        int userSelection = fileChooser.showOpenDialog(null);
+	        if (userSelection == JFileChooser.APPROVE_OPTION)
+			{
+	            File fileToOpen = fileChooser.getSelectedFile();
+				this.text.setText(this.text.getText() + imageReader.readImage(fileToOpen));
+	        }
+		}
+
 		if (e.getSource() == this.upperHalfBlock)
     		this.text.setText(this.text.getText() + "▀");
 		if (e.getSource() == this.lowerOneEighthBlock)
