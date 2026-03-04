@@ -1,6 +1,7 @@
-import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 public class imageReader {
 	public static String readImage (File file)
@@ -16,6 +17,20 @@ public class imageReader {
 
 			int width = image.getWidth();
 			int height = image.getHeight();
+
+			if (width > 19)
+			{
+				BufferedImage resized = new BufferedImage(19, (int)(height * (19.0/width)), image.getType());
+				
+				Graphics2D g = resized.createGraphics();
+				g.drawImage(image, 0, 0, 19, (int)(height * 19.0/width), null);
+				g.dispose();
+
+				image = resized;
+			}
+
+			width = image.getWidth();
+			height = image.getHeight();
 
 			for (int cpty = 0; cpty < height; cpty++)
 			{

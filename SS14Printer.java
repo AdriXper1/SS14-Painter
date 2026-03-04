@@ -65,11 +65,13 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 
 	Panel panel		 = new Panel(new GridLayout(1,2));
 	Panel leftPanel  = new Panel(new BorderLayout());
+	Panel centerPanel= new Panel(new BorderLayout());
 
 	Panel setings	 = new Panel(new GridLayout(3,10));
 	Panel colors	 = new Panel(new GridLayout(3,10));
 
-	TextArea text    = new TextArea("super long test");
+	TextArea text    = new TextArea("");
+	TextField nbChar = new TextField("remember you have a lenght limit");
 	JTextPane result = new JTextPane();
 	JScrollPane jsp  = new JScrollPane(result);
 
@@ -144,8 +146,11 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 			helpMenu.add(guidMenuItem);
 
 		panel.add(leftPanel);
-		panel.add(text);
+		panel.add(centerPanel);
 		panel.add(jsp);
+
+		centerPanel.add(text, BorderLayout.CENTER);
+		centerPanel.add(nbChar, BorderLayout.SOUTH);
 
 		leftPanel.add(setings, BorderLayout.NORTH);
 		leftPanel.add(colors, BorderLayout.SOUTH);
@@ -173,7 +178,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 
 		result.setContentType("text/html");
 		result.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-		result.setFont(new Font("Noto Sans", Font.PLAIN, 14));
+		result.setFont(new Font("Noto Sans", Font.PLAIN, 16));
 		result.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		result.setText(this.text.getText());
 
@@ -441,6 +446,7 @@ public class SS14Printer extends Frame implements ActionListener, TextListener, 
 		if (e.getSource() == this.text)
 		{
 			this.result.setText(Decoder(this.text.getText()));
+			this.nbChar.setText(this.text.getText().length() + " characters");
 			this.text.requestFocus();
 		}
 	}
